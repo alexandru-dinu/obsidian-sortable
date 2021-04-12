@@ -1,56 +1,73 @@
-import { App, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import {
+	App, Plugin, PluginSettingTab, Setting
+} from 'obsidian';
 
-interface MyPluginSettings {
+interface SortableSettings {
 	mySetting: string;
 }
 
-const DEFAULT_SETTINGS: MyPluginSettings = {
+const DEFAULT_SETTINGS: SortableSettings = {
 	mySetting: 'default'
 }
 
-export default class MyPlugin extends Plugin {
-	settings: MyPluginSettings;
+// TODO
+// - (?) arrows should be displayed only on "sortable" tables => "this.asc"
+// - (!) want the event to happen only when clicking on arrows
+// https://javascript.plainenglish.io/easy-table-sorting-with-javascript-370d8d97cad8
+// https://stackoverflow.com/questions/14267781/sorting-html-table-with-javascript
+
+export default class SortablePlugin extends Plugin {
+	settings: SortableSettings;
+	asc: boolean = true;
+
+	compareFn(idx: number, asc: boolean): any {
+		return (a, b) => {
+			const v1 = this.getCellValue(asc ? a : b, idx);
+			const v2 = this.getCellValue(asc ? b : a, idx);
+
+			if (typeof (v1) == 'number' && typeof (v2) == 'number') {
+				return v1 - v2;
+			}
+			else {
+				return v1.toString().localeCompare(v2.toString());
+			}
+		}
+	}
+
+	tryParseFloat(x: string): string | number {
+		const y = parseFloat(x);
+		return isNaN(y) ? x : y;
+	}
+
+	getCellValue(tr: any, idx: number): string | number {
+		return this.tryParseFloat(tr.children[idx].innerText || tr.children[idx].textContent);
+	}
 
 	async onload() {
-		console.log('loading plugin');
+		console.log('loading sortable plugin');
 
 		await this.loadSettings();
 
-		this.addRibbonIcon('dice', 'Sample Plugin', () => {
-			new Notice('This is a notice!');
-		});
-
-		this.addStatusBarItem().setText('Status Bar Text');
-
-		this.addCommand({
-			id: 'open-sample-modal',
-			name: 'Open Sample Modal',
-			// callback: () => {
-			// 	console.log('Simple Callback');
-			// },
-			checkCallback: (checking: boolean) => {
-				let leaf = this.app.workspace.activeLeaf;
-				if (leaf) {
-					if (!checking) {
-						new SampleModal(this.app).open();
-					}
-					return true;
-				}
-				return false;
-			}
-		});
-
-		this.addSettingTab(new SampleSettingTab(this.app, this));
-
-		this.registerCodeMirror((cm: CodeMirror.Editor) => {
-			console.log('codemirror', cm);
-		});
-
 		this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
-			console.log('click', evt);
-		});
+			const htmlEl = (<HTMLInputElement>evt.target);
 
-		this.registerInterval(window.setInterval(() => console.log('setInterval'), 5 * 60 * 1000));
+			const table = htmlEl.closest('table');
+			if (table == null) { return; }
+
+			const th = htmlEl.closest('thead th');
+			if (th == null) { return; }
+
+			const tbody = table.querySelector('tbody');
+			const thIdx = Array.from(th.parentNode.children).indexOf(th);
+
+			console.log('Clicked on', th.textContent, thIdx, 'asc:', this.asc);
+
+			Array.from(tbody.querySelectorAll('tr:nth-child(n)'))
+				.sort(this.compareFn(thIdx, this.asc))
+				.forEach(tr => tbody.appendChild(tr));
+
+			this.asc = !this.asc;
+		});
 	}
 
 	onunload() {
@@ -66,45 +83,28 @@ export default class MyPlugin extends Plugin {
 	}
 }
 
-class SampleModal extends Modal {
-	constructor(app: App) {
-		super(app);
-	}
+class SortableSettingTab extends PluginSettingTab {
+	plugin: SortablePlugin;
 
-	onOpen() {
-		let {contentEl} = this;
-		contentEl.setText('Woah!');
-	}
-
-	onClose() {
-		let {contentEl} = this;
-		contentEl.empty();
-	}
-}
-
-class SampleSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
-
-	constructor(app: App, plugin: MyPlugin) {
+	constructor(app: App, plugin: SortablePlugin) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
 
 	display(): void {
-		let {containerEl} = this;
+		let { containerEl } = this;
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', {text: 'Settings for my awesome plugin.'});
+		containerEl.createEl('h2', { text: 'Sortable Plugin - Settings' });
 
 		new Setting(containerEl)
 			.setName('Setting #1')
 			.setDesc('It\'s a secret')
 			.addText(text => text
-				.setPlaceholder('Enter your secret')
+				.setPlaceholder('Hit me')
 				.setValue('')
 				.onChange(async (value) => {
-					console.log('Secret: ' + value);
 					this.plugin.settings.mySetting = value;
 					await this.plugin.saveSettings();
 				}));
