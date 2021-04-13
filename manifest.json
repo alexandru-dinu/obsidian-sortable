@@ -1,10 +1,10 @@
 {
-	"id": "obsidian-sortable",
-	"name": "Sortable",
-	"version": "0.1.0",
-	"minAppVersion": "0.9.12",
-	"description": "Wiki-like table sorting.",
-	"author": "Alexandru Dinu",
-	"authorUrl": "https://github.com/alexandru-dinu",
-	"isDesktopOnly": false
+    "id": "obsidian-sortable",
+    "name": "Sortable",
+    "version": "0.1.0",
+    "minAppVersion": "0.9.12",
+    "description": "Wiki-like table sorting.",
+    "author": "Alexandru Dinu",
+    "authorUrl": "https://github.com/alexandru-dinu",
+    "isDesktopOnly": false
 }
