@@ -10,19 +10,14 @@ const DEFAULT_SETTINGS: SortableSettings = {
     mySetting: 'default'
 }
 
-// TODO
-// (?) arrows should be displayed only on "sortable" tables => "this.asc"
-// (!) want the event to happen only when clicking on arrows
-// change css for sorting direction
-// https://javascript.plainenglish.io/easy-table-sorting-with-javascript-370d8d97cad8
-// https://stackoverflow.com/questions/14267781/sorting-html-table-with-javascript
 
 export default class SortablePlugin extends Plugin {
     settings: SortableSettings;
-    asc: boolean = true;
+
+    classNames: Array<string> = ["header-sort-up", "header-sort-down"];
 
     compareFn(idx: number, asc: boolean): any {
-        return (a, b) => {
+        return (a: any, b: any) => {
             const v1 = this.getCellValue(asc ? a : b, idx);
             const v2 = this.getCellValue(asc ? b : a, idx);
 
@@ -52,22 +47,31 @@ export default class SortablePlugin extends Plugin {
         this.registerDomEvent(document, 'click', (evt: MouseEvent) => {
             const htmlEl = (<HTMLInputElement>evt.target);
 
-            const table = htmlEl.closest('table');
-            if (table == null) { return; }
-
             const th = htmlEl.closest('thead th');
             if (th == null) { return; }
 
+            const table = htmlEl.closest('table');
             const tbody = table.querySelector('tbody');
-            const thIdx = Array.from(th.parentNode.children).indexOf(th);
+            const thArray = Array.from(th.parentNode.children);
+            const thIdx = thArray.indexOf(th);
 
-            console.log('Clicked on', th.textContent, thIdx, 'asc:', this.asc);
+            // all other th's are reset
+            thArray.forEach((th, i) => {
+                if (i != thIdx) {
+                    th.removeAttribute("class");
+                }
+            });
+
+            // set clicked th class
+            th.className = this.classNames[
+                (this.classNames.indexOf(th.className) + 1) % this.classNames.length
+            ];
+
+            const ascending = th.className === "header-sort-up";
 
             Array.from(tbody.querySelectorAll('tr:nth-child(n)'))
-                .sort(this.compareFn(thIdx, this.asc))
+                .sort(this.compareFn(thIdx, ascending))
                 .forEach(tr => tbody.appendChild(tr));
-
-            this.asc = !this.asc;
         });
     }
 

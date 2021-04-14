@@ -1,0 +1,21 @@
+:root {
+    --arrows-up: url("https://en.wikipedia.org/w/resources/src/jquery.tablesorter.styles/images/sort_up.svg?dd026");
+    --arrows-down: url("https://en.wikipedia.org/w/resources/src/jquery.tablesorter.styles/images/sort_down.svg?fb375");
+    --arrows-up-down: url("https://en.wikipedia.org/w/resources/src/jquery.tablesorter.styles/images/sort_both.svg?6b5ca");
+}
+
+.markdown-preview-view th {
+    background-image: var(--arrows-up-down);
+    background-repeat: no-repeat;
+    background-position: center right;
+    padding-right: 21px;
+    cursor: pointer;
+}
+
+th.header-sort-up {
+    background-image: var(--arrows-up);
+}
+
+th.header-sort-down {
+    background-image: var(--arrows-down);
+}
