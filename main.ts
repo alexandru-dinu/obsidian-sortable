@@ -1,6 +1,4 @@
-import {
-    App, Plugin, PluginSettingTab, Setting
-} from 'obsidian';
+import { Plugin } from 'obsidian';
 
 interface SortableSettings {
     mySetting: string;
@@ -9,7 +7,6 @@ interface SortableSettings {
 const DEFAULT_SETTINGS: SortableSettings = {
     mySetting: 'default'
 }
-
 
 export default class SortablePlugin extends Plugin {
     settings: SortableSettings;
@@ -85,33 +82,5 @@ export default class SortablePlugin extends Plugin {
 
     async saveSettings() {
         await this.saveData(this.settings);
-    }
-}
-
-class SortableSettingTab extends PluginSettingTab {
-    plugin: SortablePlugin;
-
-    constructor(app: App, plugin: SortablePlugin) {
-        super(app, plugin);
-        this.plugin = plugin;
-    }
-
-    display(): void {
-        let { containerEl } = this;
-
-        containerEl.empty();
-
-        containerEl.createEl('h2', { text: 'Sortable Plugin - Settings' });
-
-        new Setting(containerEl)
-            .setName('Setting #1')
-            .setDesc('It\'s a secret')
-            .addText(text => text
-                .setPlaceholder('Hit me')
-                .setValue('')
-                .onChange(async (value) => {
-                    this.plugin.settings.mySetting = value;
-                    await this.plugin.saveSettings();
-                }));
     }
 }
