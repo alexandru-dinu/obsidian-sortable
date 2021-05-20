@@ -12,19 +12,19 @@ if you want to view the source visit the plugins github repository
 `;
 
 export default {
-  input: 'main.ts',
-  output: {
-    dir: '.',
-    sourcemap: 'inline',
-    sourcemapExcludeSources: isProd,
-    format: 'cjs',
-    exports: 'default',
-    banner,
-  },
-  external: ['obsidian'],
-  plugins: [
-    typescript(),
-    nodeResolve({browser: true}),
-    commonjs(),
-  ]
+    input: 'main.ts',
+    output: {
+        dir: '.',
+        sourcemap: 'inline',
+        sourcemapExcludeSources: isProd,
+        format: 'cjs',
+        exports: 'default',
+        banner,
+    },
+    external: ['obsidian'],
+    plugins: [
+        typescript(),
+        nodeResolve({browser: true}),
+        commonjs(),
+    ]
 };
