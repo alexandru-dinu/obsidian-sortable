@@ -37,7 +37,7 @@ export default class SortablePlugin extends Plugin {
     }
 
     async onload() {
-        console.log('loading sortable plugin');
+        console.log('Sortable: loading plugin...');
 
         await this.loadSettings();
 
@@ -70,10 +70,12 @@ export default class SortablePlugin extends Plugin {
                 .sort(this.compareFn(thIdx, ascending))
                 .forEach(tr => tbody.appendChild(tr));
         });
+
+        console.log('Sortable: loaded plugin.');
     }
 
     onunload() {
-        console.log('unloading plugin');
+        console.log('Sortable: unloaded plugin.');
     }
 
     async loadSettings() {
