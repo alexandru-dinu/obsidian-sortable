@@ -1,5 +1,7 @@
 # Obsidian Sortable
 
+[![Discussions](https://img.shields.io/badge/discussions-welcome-blueviolet)](https://github.com/alexandru-dinu/obsidian-sortable/discussions)
+
 Sortable is a plugin for [Obsidian](https://obsidian.md) that aims to offer [Wikipedia-like](https://en.wikipedia.org/wiki/Help:Sorting#Example) sortable tables. Currently, the plugin supports ascending / descending sorting based on the data-type of the table header that was clicked.
 
 ## Usage
