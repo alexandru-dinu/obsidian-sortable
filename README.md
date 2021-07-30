@@ -1,6 +1,6 @@
 # Obsidian Sortable
 
-Sortable is a plugin for [Obsidian](https://obsidian.md) that aims to offer [Wikipedia-like](https://en.wikipedia.org/wiki/Help:Sorting#Example) sortable tables. Right now, the plugin offers ascending / descending sorting based on the data-type of the table header that was clicked.
+Sortable is a plugin for [Obsidian](https://obsidian.md) that aims to offer [Wikipedia-like](https://en.wikipedia.org/wiki/Help:Sorting#Example) sortable tables. Currently, the plugin supports ascending / descending sorting based on the data-type of the table header that was clicked.
 
 ## Usage
 Please note that the development is in (early) alpha stage. If you want to test the plugin, you can download the [latest release](https://github.com/alexandru-dinu/obsidian-sortable/releases), unzip the contents to `/path/to/vault/.obsidian/plugins/obsidian-sortable` and enable it from the settings.
