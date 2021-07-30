@@ -18,10 +18,10 @@
     cursor: pointer;
 }
 
-th.header-sort-up {
+th[sortable-style="sortable-asc"] {
     background-image: var(--arrows-up);
 }
 
-th.header-sort-down {
+th[sortable-style="sortable-desc"] {
     background-image: var(--arrows-down);
 }

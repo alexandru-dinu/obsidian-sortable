@@ -6,7 +6,7 @@ Sortable is a plugin for [Obsidian](https://obsidian.md) that aims to offer [Wik
 Please note that the development is in (early) alpha stage. If you want to test the plugin, you can download the [latest release](https://github.com/alexandru-dinu/obsidian-sortable/releases), unzip the contents to `/path/to/vault/.obsidian/plugins/obsidian-sortable` and enable it from the settings.
 
 ## Key features
-- No additional third-party dependencies apart from the ones needed by the [Obsidian API](https://github.com/obsidianmd/obsidian-api).
+- Minimal third-party dependencies: [uuid](https://www.npmjs.com/package/uuid) for uniquely identifying tables.
 - No altering of the markdown source code. Sorting is done solely in preview mode by rearranging rows (i.e. `tr` elements).
 
 ## Upcoming features
