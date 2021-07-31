@@ -1,5 +1,5 @@
 import { Plugin } from 'obsidian';
-import { onHeadClick, TTableStates } from 'sortable';
+import { onHeadClick, TTableStates } from 'src/sortable';
 
 interface SortableSettings {
     mySetting: string;
