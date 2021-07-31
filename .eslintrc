@@ -1,0 +1,22 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "consistent-return": 2,
+    "indent": ["error", 4, {"SwitchCase": 1}],
+    "no-else-return": 1,
+    "semi": [1, "always"],
+    "space-unary-ops": 2,
+    "use-isnan": 2,
+    "valid-typeof": 2,
+    "eqeqeq": 2
+  }
+}

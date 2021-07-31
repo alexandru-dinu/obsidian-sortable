@@ -1,5 +1,5 @@
 import { Plugin } from 'obsidian';
-import { onHeadClick, TableState } from 'sortable';
+import { onHeadClick, TTableStates } from 'sortable';
 
 interface SortableSettings {
     mySetting: string;
@@ -7,13 +7,13 @@ interface SortableSettings {
 
 const DEFAULT_SETTINGS: SortableSettings = {
     mySetting: 'default'
-}
+};
 
 export default class SortablePlugin extends Plugin {
     settings: SortableSettings;
-    tableStates: { [key: string]: TableState };
+    tableStates: TTableStates;
 
-    async onload() {
+    async onload(): Promise<void> {
         console.log('Sortable: loading plugin...');
 
         await this.loadSettings();
@@ -25,17 +25,17 @@ export default class SortablePlugin extends Plugin {
         console.log('Sortable: loaded plugin.');
     }
 
-    onunload() {
+    onunload(): void {
         // TODO: delete tableStates
 
         console.log('Sortable: unloaded plugin.');
     }
 
-    async loadSettings() {
+    async loadSettings(): Promise<void> {
         this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
     }
 
-    async saveSettings() {
+    async saveSettings(): Promise<void> {
         await this.saveData(this.settings);
     }
 }

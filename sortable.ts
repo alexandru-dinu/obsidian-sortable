@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 
 enum SortOrder {
@@ -7,38 +7,43 @@ enum SortOrder {
 
 enum AttributeName {
     table = "sortable-id",
-    tableHeader = "sortable-style"
+    tableHeader = "sortable-style",
+    cssAscending = "sortable-asc",
+    cssDescending = "sortable-desc"
 }
 
 export class TableState {
     columnIdx: number = null;
     sortOrder: SortOrder = SortOrder.DEFAULT;
-    defaultOrdering: Array<any> = null;
+    defaultOrdering: Array<HTMLTableRowElement> = null;
 }
 
+// Each TableState is uniquely identified by a uuid.
+export type TTableStates = { [key: string]: TableState };
 
-export function onHeadClick(evt: MouseEvent, tableStates: any): void {
+
+export function onHeadClick(evt: MouseEvent, tableStates: TTableStates): void {
     const htmlEl = (<HTMLInputElement>evt.target);
 
-    const th = htmlEl.closest('thead th');
-    if (th == null) { return; }
+    const th = htmlEl.closest("thead th");
+    if (th === null) { return; }
 
-    const table = htmlEl.closest('table');
-    const tableBody = table.querySelector('tbody');
+    const table = htmlEl.closest("table");
+    const tableBody = table.querySelector("tbody");
     const thArray = Array.from(th.parentNode.children);
     const thIdx = thArray.indexOf(th);
 
-    var tableID: string | null = table.getAttribute(AttributeName.table);
+    let tableID: string | null = table.getAttribute(AttributeName.table);
 
     if (tableID === null) {
         tableID = uuidv4().slice(0, 8);
         table.setAttribute(AttributeName.table, tableID);
         tableStates[tableID] = new TableState();
     }
-    var tableState = tableStates[tableID];
+    const tableState = tableStates[tableID];
 
     thArray.forEach((th, i) => {
-        if (i != thIdx) {
+        if (i !== thIdx) {
             th.removeAttribute(AttributeName.tableHeader);
         }
     });
@@ -59,12 +64,15 @@ export function onHeadClick(evt: MouseEvent, tableStates: any): void {
 
     sortTable(tableState, tableBody);
 
-    // TODO: also put in settings
-    if (tableState.sortOrder === SortOrder.ASCENDING) {
-        th.setAttribute(AttributeName.tableHeader, "sortable-asc");
-    }
-    if (tableState.sortOrder === SortOrder.DESCENDING) {
-        th.setAttribute(AttributeName.tableHeader, "sortable-desc");
+    switch (tableState.sortOrder) {
+        case SortOrder.ASCENDING:
+            th.setAttribute(AttributeName.tableHeader, AttributeName.cssAscending);
+            break;
+        case SortOrder.DESCENDING:
+            th.setAttribute(AttributeName.tableHeader, AttributeName.cssDescending);
+            break;
+        default:
+            break;
     }
 
     // TODO: closing the table page will
@@ -88,24 +96,22 @@ function sortTable(tableState: TableState, tableBody: HTMLTableSectionElement): 
     const xs = [...tableState.defaultOrdering];
     xs.sort((a, b) => compareRows(a, b, tableState.columnIdx, tableState.sortOrder));
 
-    fillTable(tableBody, xs)
+    fillTable(tableBody, xs);
 }
 
 function compareRows(a: HTMLTableRowElement, b: HTMLTableRowElement, index: number, order: SortOrder) {
-    var valueA = valueFromCell(a.cells[index]);
-    var valueB = valueFromCell(b.cells[index]);
+    let valueA = valueFromCell(a.cells[index]);
+    let valueB = valueFromCell(b.cells[index]);
 
-    if (order == SortOrder.DESCENDING) {
+    if (order === SortOrder.DESCENDING) {
         [valueA, valueB] = [valueB, valueA];
     }
 
-    if (typeof (valueA) === 'number' && typeof (valueA) === 'number') {
+    if (typeof (valueA) === "number" && typeof (valueA) === "number") {
         return valueA < valueB ? -1 : 1;
     }
-    else {
-        return valueA.toString().localeCompare(valueB.toString());
-    }
 
+    return valueA.toString().localeCompare(valueB.toString());
 }
 
 function tryParseFloat(x: string): string | number {
