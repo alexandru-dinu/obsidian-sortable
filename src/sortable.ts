@@ -75,10 +75,10 @@ export function onHeadClick(evt: MouseEvent, tableStates: TTableStates): void {
             break;
     }
 
-    // TODO: closing the table page will
+    // TODO (#16): Remove table state on pane close
     // If the current state is now the default one, then forget about this table
     if (tableState.sortOrder === SortOrder.DEFAULT) {
-        // TODO -- verify whether this removes the memory for value (e.g. array etc)
+        // TODO: verify whether this removes the memory for value (e.g. array etc)
         delete tableStates[tableID];
         table.removeAttribute(AttributeName.table);
         th.removeAttribute(AttributeName.tableHeader);
