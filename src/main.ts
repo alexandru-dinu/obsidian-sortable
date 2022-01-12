@@ -1,5 +1,5 @@
 import { Plugin } from 'obsidian';
-import { onHeadClick, TTableStates } from 'src/sortable';
+import { onHeadClick, TTableStates, AttributeName, resetTable } from 'src/sortable';
 
 interface SortableSettings {
     mySetting: string;
@@ -26,7 +26,38 @@ export default class SortablePlugin extends Plugin {
     }
 
     onunload(): void {
-        // TODO: delete tableStates
+        // iterate through all table elements in the document
+        // and remove the table attribute
+        const tables = Array.from(document.querySelectorAll('table'));
+        for (const table of tables) {
+            const tableID: string | null = table.getAttribute(AttributeName.table);
+
+            // this table is in the default state
+            if (tableID === null) {
+                continue;
+            }
+
+            const state = this.tableStates[tableID];
+
+            // restore original order
+            resetTable(state, table.querySelector('tbody'));
+
+            // remove "sortable" attribute
+            table.removeAttribute(AttributeName.table);
+
+            // remove tableHeader attribute
+            const th = table.querySelector(`thead th:nth-child(${state.columnIdx + 1})`);
+            th.removeAttribute(AttributeName.tableHeader);
+
+            delete this.tableStates[tableID];
+        }
+
+        // delete remaining keys in the tableStates object
+        // ideally, this should not be necessary, see (#16)
+        const remKeys = Object.keys(this.tableStates);
+        for (const key of remKeys) {
+            delete this.tableStates[key];
+        }
 
         console.log('Sortable: unloaded plugin.');
     }

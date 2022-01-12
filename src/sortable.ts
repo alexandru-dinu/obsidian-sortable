@@ -5,7 +5,7 @@ enum SortOrder {
     DEFAULT, ASCENDING, DESCENDING
 }
 
-enum AttributeName {
+export enum AttributeName {
     table = "sortable-id",
     tableHeader = "sortable-style",
     cssAscending = "sortable-asc",
@@ -75,14 +75,14 @@ export function onHeadClick(evt: MouseEvent, tableStates: TTableStates): void {
             break;
     }
 
-    // TODO (#16): Remove table state on pane close
     // If the current state is now the default one, then forget about this table
     if (tableState.sortOrder === SortOrder.DEFAULT) {
-        // TODO: verify whether this removes the memory for value (e.g. array etc)
         delete tableStates[tableID];
         table.removeAttribute(AttributeName.table);
         th.removeAttribute(AttributeName.tableHeader);
     }
+
+    // TODO (#16): Remove table state on pane close
 }
 
 function sortTable(tableState: TableState, tableBody: HTMLTableSectionElement): void {
@@ -97,6 +97,11 @@ function sortTable(tableState: TableState, tableBody: HTMLTableSectionElement): 
     xs.sort((a, b) => compareRows(a, b, tableState.columnIdx, tableState.sortOrder));
 
     fillTable(tableBody, xs);
+}
+
+export function resetTable(tableState: TableState, tableBody: HTMLTableSectionElement): void {
+    emptyTable(tableBody, tableState.defaultOrdering);
+    fillTable(tableBody, tableState.defaultOrdering);
 }
 
 function compareRows(a: HTMLTableRowElement, b: HTMLTableRowElement, index: number, order: SortOrder) {
