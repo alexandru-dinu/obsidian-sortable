@@ -17,8 +17,8 @@ https://user-images.githubusercontent.com/14110183/128138299-fd2a1bb2-6f87-4b50-
 </details>
 
 - Sorting numerical and string data types. Custom comparator functions are part of the roadmap (see this [issue](https://github.com/alexandru-dinu/obsidian-sortable/issues/12)).
-- There is only one dependency: [uuid](https://www.npmjs.com/package/uuid) for uniquely identifying tables.
 - No altering of the markdown source code. Sorting is done solely in preview mode by rearranging rows (i.e. `tr` elements).
+- No dependencies.
 
 ## Usage
 Download the files from the latest [release](https://github.com/alexandru-dinu/obsidian-sortable/releases),

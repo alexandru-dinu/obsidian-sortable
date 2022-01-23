@@ -1,15 +1,13 @@
-import { v4 as uuidv4 } from "uuid";
-
-
 enum SortOrder {
-    DEFAULT, ASCENDING, DESCENDING
+    DEFAULT,
+    ASCENDING,
+    DESCENDING,
 }
 
 export enum AttributeName {
-    table = "sortable-id",
     tableHeader = "sortable-style",
     cssAscending = "sortable-asc",
-    cssDescending = "sortable-desc"
+    cssDescending = "sortable-desc",
 }
 
 export class TableState {
@@ -18,29 +16,29 @@ export class TableState {
     defaultOrdering: Array<HTMLTableRowElement> = null;
 }
 
-// Each TableState is uniquely identified by a uuid.
-export type TTableStates = { [key: string]: TableState };
-
+export type TTableStates = WeakMap<HTMLTableElement, TableState>;
 
 export function onHeadClick(evt: MouseEvent, tableStates: TTableStates): void {
-    const htmlEl = (<HTMLInputElement>evt.target);
-
+    // check if the clicked element is a table header
+    const htmlEl = <HTMLElement>evt.target;
+    if (!htmlEl.matchParent(".markdown-preview-view")) {
+        return;
+    }
     const th = htmlEl.closest("thead th");
-    if (th === null) { return; }
+    if (th === null) {
+        return;
+    }
 
     const table = htmlEl.closest("table");
     const tableBody = table.querySelector("tbody");
     const thArray = Array.from(th.parentNode.children);
     const thIdx = thArray.indexOf(th);
 
-    let tableID: string | null = table.getAttribute(AttributeName.table);
-
-    if (tableID === null) {
-        tableID = uuidv4().slice(0, 8);
-        table.setAttribute(AttributeName.table, tableID);
-        tableStates[tableID] = new TableState();
+    // create a new table state if does not previously exist
+    if (!tableStates.has(table)) {
+        tableStates.set(table, new TableState());
     }
-    const tableState = tableStates[tableID];
+    const tableState = tableStates.get(table);
 
     thArray.forEach((th, i) => {
         if (i !== thIdx) {
@@ -75,14 +73,11 @@ export function onHeadClick(evt: MouseEvent, tableStates: TTableStates): void {
             break;
     }
 
-    // If the current state is now the default one, then forget about this table
+    // if the current state is now the default one, then forget about this table
     if (tableState.sortOrder === SortOrder.DEFAULT) {
-        delete tableStates[tableID];
-        table.removeAttribute(AttributeName.table);
+        tableStates.delete(table);
         th.removeAttribute(AttributeName.tableHeader);
     }
-
-    // TODO (#16): Remove table state on pane close
 }
 
 function sortTable(tableState: TableState, tableBody: HTMLTableSectionElement): void {
@@ -112,7 +107,7 @@ function compareRows(a: HTMLTableRowElement, b: HTMLTableRowElement, index: numb
         [valueA, valueB] = [valueB, valueA];
     }
 
-    if (typeof (valueA) === "number" && typeof (valueA) === "number") {
+    if (typeof valueA === "number" && typeof valueA === "number") {
         return valueA < valueB ? -1 : 1;
     }
 
@@ -129,10 +124,10 @@ function valueFromCell(element: HTMLTableCellElement) {
     return tryParseFloat(element.textContent);
 }
 
-function emptyTable(tableBody:HTMLTableSectionElement, rows:Array<HTMLTableRowElement>) {
+function emptyTable(tableBody: HTMLTableSectionElement, rows: Array<HTMLTableRowElement>) {
     rows.forEach(() => tableBody.deleteRow(-1));
 }
 
-function fillTable(tableBody:HTMLTableSectionElement, rows:Array<HTMLTableRowElement>) {
+function fillTable(tableBody: HTMLTableSectionElement, rows: Array<HTMLTableRowElement>) {
     rows.forEach((row) => tableBody.appendChild(row));
 }

@@ -1,72 +1,38 @@
-import { Plugin } from 'obsidian';
-import { onHeadClick, TTableStates, AttributeName, resetTable } from 'src/sortable';
-
-interface SortableSettings {
-    mySetting: string;
-}
-
-const DEFAULT_SETTINGS: SortableSettings = {
-    mySetting: 'default'
-};
+import { Plugin } from "obsidian";
+import { onHeadClick, TTableStates, AttributeName, resetTable } from "src/sortable";
 
 export default class SortablePlugin extends Plugin {
-    settings: SortableSettings;
     tableStates: TTableStates;
 
     async onload(): Promise<void> {
-        console.log('Sortable: loading plugin...');
+        console.log("Sortable: loading plugin...");
 
-        await this.loadSettings();
+        this.tableStates = new WeakMap();
 
-        this.tableStates = {};
+        this.registerDomEvent(document, "click", (ev: MouseEvent) => onHeadClick(ev, this.tableStates));
 
-        this.registerDomEvent(document, 'click', (ev: MouseEvent) => onHeadClick(ev, this.tableStates));
-
-        console.log('Sortable: loaded plugin.');
+        console.log("Sortable: loaded plugin.");
     }
 
     onunload(): void {
-        // iterate through all table elements in the document
-        // and remove the table attribute
-        const tables = Array.from(document.querySelectorAll('table'));
+        // get all HTMLTableElements present in the map and reset their state
+        const tables = Array.from(document.querySelectorAll("table"));
+
         for (const table of tables) {
-            const tableID: string | null = table.getAttribute(AttributeName.table);
+            if (this.tableStates.has(table)) {
+                const state = this.tableStates.get(table);
 
-            // this table is in the default state
-            if (tableID === null) {
-                continue;
+                resetTable(state, table.querySelector("tbody"));
+
+                const th = table.querySelector(`thead th:nth-child(${state.columnIdx + 1})`);
+                th.removeAttribute(AttributeName.tableHeader);
+
+                this.tableStates.delete(table);
             }
-
-            const state = this.tableStates[tableID];
-
-            // restore original order
-            resetTable(state, table.querySelector('tbody'));
-
-            // remove "sortable" attribute
-            table.removeAttribute(AttributeName.table);
-
-            // remove tableHeader attribute
-            const th = table.querySelector(`thead th:nth-child(${state.columnIdx + 1})`);
-            th.removeAttribute(AttributeName.tableHeader);
-
-            delete this.tableStates[tableID];
         }
 
-        // delete remaining keys in the tableStates object
-        // ideally, this should not be necessary, see (#16)
-        const remKeys = Object.keys(this.tableStates);
-        for (const key of remKeys) {
-            delete this.tableStates[key];
-        }
+        delete this.tableStates;
 
-        console.log('Sortable: unloaded plugin.');
-    }
-
-    async loadSettings(): Promise<void> {
-        this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-    }
-
-    async saveSettings(): Promise<void> {
-        await this.saveData(this.settings);
+        console.log("Sortable: unloaded plugin.");
     }
 }
