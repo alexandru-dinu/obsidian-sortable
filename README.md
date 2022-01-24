@@ -20,9 +20,12 @@ https://user-images.githubusercontent.com/14110183/128138299-fd2a1bb2-6f87-4b50-
 - No altering of the markdown source code. Sorting is done solely in preview mode by rearranging rows (i.e. `tr` elements).
 - No dependencies.
 
-## Usage
-Download the files from the latest [release](https://github.com/alexandru-dinu/obsidian-sortable/releases),
-move them to `vault/.obsidian/plugins/obsidian-sortable` and enable "Sortable" from the Obsidian "Community plugins" settings.
+## Installation
+Search for "Sortable" in Obsidian's community plugins (`Settings > Community plugins > Browse`), install, then enable.
+
+Alternatively, you can download the required files from the latest
+[release](https://github.com/alexandru-dinu/obsidian-sortable/releases),
+move them to `vault/.obsidian/plugins/obsidian-sortable` and enable "Sortable" from the "Community plugins" settings.
 
 ## Roadmap
 Please note that the development is still in a beta stage, with more feature to be implemented.
