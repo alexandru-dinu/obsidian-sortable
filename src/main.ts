@@ -9,7 +9,9 @@ export default class SortablePlugin extends Plugin {
 
         this.tableStates = new WeakMap();
 
-        this.registerDomEvent(document, "click", (ev: MouseEvent) => onHeadClick(ev, this.tableStates));
+        this.registerDomEvent(document, "click", (ev: MouseEvent) =>
+            onHeadClick(ev, this.tableStates)
+        );
 
         console.log("Sortable: loaded plugin.");
     }

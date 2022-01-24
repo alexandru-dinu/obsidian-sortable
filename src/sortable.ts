@@ -99,7 +99,12 @@ export function resetTable(tableState: TableState, tableBody: HTMLTableSectionEl
     fillTable(tableBody, tableState.defaultOrdering);
 }
 
-function compareRows(a: HTMLTableRowElement, b: HTMLTableRowElement, index: number, order: SortOrder) {
+function compareRows(
+    a: HTMLTableRowElement,
+    b: HTMLTableRowElement,
+    index: number,
+    order: SortOrder
+) {
     let valueA = valueFromCell(a.cells[index]);
     let valueB = valueFromCell(b.cells[index]);
 
