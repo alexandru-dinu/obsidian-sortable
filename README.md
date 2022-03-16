@@ -17,7 +17,7 @@ https://user-images.githubusercontent.com/14110183/128138299-fd2a1bb2-6f87-4b50-
 </details>
 
 - Sorting numerical and string data types. Custom comparator functions are part of the roadmap (see this [issue](https://github.com/alexandru-dinu/obsidian-sortable/issues/12)).
-- No altering of the markdown source code. Sorting is done solely in reading (i.e. non-editing) mode by rearranging rows (i.e. `tr` elements).
+- No altering of the markdown source code. Sorting is done by rearranging table rows (i.e. `tr` elements).
 - No dependencies.
 
 ## Installation

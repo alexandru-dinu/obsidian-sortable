@@ -18,12 +18,24 @@ export class TableState {
 
 export type TTableStates = WeakMap<HTMLTableElement, TableState>;
 
+function shouldSort(htmlEl: HTMLElement): boolean {
+    // dataview table: parent must be a "dataview" HTMLTableElement
+    const p = htmlEl.matchParent(".dataview");
+    if (p instanceof HTMLTableElement)
+        return true;
+
+    // reading mode, i.e. non-editing
+    return null !== htmlEl.matchParent(".markdown-reading-view");
+}
+
 export function onHeadClick(evt: MouseEvent, tableStates: TTableStates): void {
     // check if the clicked element is a table header
     const htmlEl = <HTMLElement>evt.target;
-    if (!htmlEl.matchParent(".markdown-preview-view")) {
+
+    if (!shouldSort(htmlEl)) {
         return;
     }
+
     const th = htmlEl.closest("thead th");
     if (th === null) {
         return;
