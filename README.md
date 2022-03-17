@@ -20,6 +20,9 @@ https://user-images.githubusercontent.com/14110183/128138299-fd2a1bb2-6f87-4b50-
 - No altering of the markdown source code. Sorting is done by rearranging table rows (i.e. `tr` elements).
 - No dependencies.
 
+Please note that the development is still in a beta stage.
+Check the [project's roadmap](https://github.com/alexandru-dinu/obsidian-sortable/projects/1) for updates.
+
 ## Installation
 Search for "Sortable" in Obsidian's community plugins (`Settings > Community plugins > Browse`), install, then enable.
 
@@ -27,6 +30,11 @@ Alternatively, you can download the required files from the latest
 [release](https://github.com/alexandru-dinu/obsidian-sortable/releases),
 move them to `vault/.obsidian/plugins/obsidian-sortable` and enable "Sortable" from the "Community plugins" settings.
 
-## Roadmap
-Please note that the development is still in a beta stage, with more feature to be implemented.
-Check the [project's roadmap](https://github.com/alexandru-dinu/obsidian-sortable/projects/1) for updates.
+## Disclaimer
+I built Sortable mostly to fulfill my personal needs and I appreciate that now many people find it useful.
+However, given the plethora of plugins, themes and tweaks for Obsidian, numerous bugs may occur when using Sortable in various contexts.
+These may range from [UI inconsistencies](https://github.com/alexandru-dinu/obsidian-sortable/discussions/23#discussioncomment-2376620) to [inability to sort in certain states](https://github.com/alexandru-dinu/obsidian-sortable/issues/22).
+While I try to address most of the issues, please understand that I cannot accommodate every request,
+mostly because I do not use many Obsidian plugins and quirks myself.
+
+Thank you!
