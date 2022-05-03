@@ -101,7 +101,8 @@ function sortTable(tableState: TableState, tableBody: HTMLTableSectionElement): 
     }
 
     const xs = [...tableState.defaultOrdering];
-    xs.sort((a, b) => compareRows(a, b, tableState.columnIdx, tableState.sortOrder));
+    const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" });
+    xs.sort((a, b) => compareRows(a, b, tableState.columnIdx, tableState.sortOrder, collator));
 
     fillTable(tableBody, xs);
 }
@@ -115,7 +116,8 @@ function compareRows(
     a: HTMLTableRowElement,
     b: HTMLTableRowElement,
     index: number,
-    order: SortOrder
+    order: SortOrder,
+    collator: Intl.Collator
 ) {
     let valueA = valueFromCell(a.cells[index]);
     let valueB = valueFromCell(b.cells[index]);
@@ -128,7 +130,7 @@ function compareRows(
         return valueA < valueB ? -1 : 1;
     }
 
-    return valueA.toString().localeCompare(valueB.toString());
+    return collator.compare(valueA.toString(), valueB.toString());
 }
 
 function tryParseFloat(x: string): string | number {
