@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See also the [releases](https://github.com/alexandru-dinu/obsidian-sortable/releases) page.
 
+## [0.2.6] - 2022-08-06
+### Fixed
+- Don't show up-down arrows for the default table state; only show up / down arrows for ascending / descending sorting.
+
 ## [0.2.5] - 2022-05-03
 ### Fixed
 - Use `Intl.Collator` for natural sorting of strings.
@@ -35,6 +39,7 @@ See also the [releases](https://github.com/alexandru-dinu/obsidian-sortable/rele
 ### Added
 - Sort tables in ascending & descending order.
 
+[0.2.6]: https://github.com/alexandru-dinu/obsidian-sortable/compare/0.2.5...0.2.6
 [0.2.5]: https://github.com/alexandru-dinu/obsidian-sortable/compare/0.2.4...0.2.5
 [0.2.4]: https://github.com/alexandru-dinu/obsidian-sortable/compare/0.2.3...0.2.4
 [0.2.3]: https://github.com/alexandru-dinu/obsidian-sortable/compare/0.2.2...0.2.3
