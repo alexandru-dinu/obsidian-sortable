@@ -1,3 +1,12 @@
+// allows time to be optional
+const ISO_DATE_REGEX = /^(\d{4}-\d{2}-\d{2})(T\d{2}:\d{2}:\d{2}(\.\d{3})?(Z|[+-]\d{2}:\d{2})?)?$/;
+
+enum CellTypes {
+    TEXT,
+    NUMBER,
+    ISO_DATE,
+}
+
 enum SortOrder {
     DEFAULT,
     ASCENDING,
@@ -21,8 +30,7 @@ export type TTableStates = WeakMap<HTMLTableElement, TableState>;
 function shouldSort(htmlEl: HTMLElement): boolean {
     // dataview table: parent must be a "dataview" HTMLTableElement
     const p = htmlEl.matchParent(".dataview");
-    if (p instanceof HTMLTableElement)
-        return true;
+    if (p instanceof HTMLTableElement) return true;
 
     // reading mode, i.e. non-editing
     return null !== htmlEl.matchParent(".markdown-reading-view");
@@ -119,28 +127,38 @@ function compareRows(
     order: SortOrder,
     collator: Intl.Collator
 ) {
-    let valueA = valueFromCell(a.cells[index]);
-    let valueB = valueFromCell(b.cells[index]);
+    let [valueA, typeA] = valueFromCell(a.cells[index]);
+    let [valueB, typeB] = valueFromCell(b.cells[index]);
 
     if (order === SortOrder.DESCENDING) {
         [valueA, valueB] = [valueB, valueA];
     }
 
-    if (typeof valueA === "number" && typeof valueA === "number") {
-        return valueA < valueB ? -1 : 1;
+    if (typeA !== typeB) {
+        return collator.compare(valueA.toString(), valueB.toString());
     }
 
-    return collator.compare(valueA.toString(), valueB.toString());
+    switch (typeA) {
+        case CellTypes.NUMBER:
+        case CellTypes.ISO_DATE:
+            return valueA === valueB ? 0 : valueA < valueB ? -1 : 1;
+        case CellTypes.TEXT:
+            return collator.compare(valueA.toString(), valueB.toString());
+    }
 }
 
-function tryParseFloat(x: string): string | number {
-    const y = parseFloat(x);
-    return isNaN(y) ? x : y;
-}
-
-function valueFromCell(element: HTMLTableCellElement) {
+function valueFromCell(element: HTMLTableCellElement): [any, CellTypes] {
     // TODO: extend to other data-types.
-    return tryParseFloat(element.textContent);
+    const text = element.textContent;
+
+    if (ISO_DATE_REGEX.test(text)) {
+        return [new Date(text), CellTypes.ISO_DATE];
+    }
+    const value = parseFloat(text);
+    if (!isNaN(value)) {
+        return [value, CellTypes.NUMBER];
+    }
+    return [text, CellTypes.TEXT];
 }
 
 function emptyTable(tableBody: HTMLTableSectionElement, rows: Array<HTMLTableRowElement>) {

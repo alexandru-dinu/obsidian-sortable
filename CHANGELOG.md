@@ -3,6 +3,11 @@
 All notable changes to this project will be documented in this file.
 See also the [releases](https://github.com/alexandru-dinu/obsidian-sortable/releases) page.
 
+## [0.3.0] - 2023-01-10
+### Added
+- Introduce sorting by ISO dates ([regex](https://regex101.com/r/RfMAcx/1)).
+    - Mandatory format is `YYYY-MM-DD`, time is optional.
+
 ## [0.2.6] - 2022-08-06
 ### Fixed
 - Don't show up-down arrows for the default table state; only show up / down arrows for ascending / descending sorting.
@@ -39,6 +44,7 @@ See also the [releases](https://github.com/alexandru-dinu/obsidian-sortable/rele
 ### Added
 - Sort tables in ascending & descending order.
 
+[0.3.0]: https://github.com/alexandru-dinu/obsidian-sortable/compare/0.2.6...0.3.0
 [0.2.6]: https://github.com/alexandru-dinu/obsidian-sortable/compare/0.2.5...0.2.6
 [0.2.5]: https://github.com/alexandru-dinu/obsidian-sortable/compare/0.2.4...0.2.5
 [0.2.4]: https://github.com/alexandru-dinu/obsidian-sortable/compare/0.2.3...0.2.4
