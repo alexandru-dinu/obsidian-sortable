@@ -16,7 +16,7 @@ https://user-images.githubusercontent.com/14110183/128138299-fd2a1bb2-6f87-4b50-
 
 </details>
 
-- Sorting numerical and string data types. Custom comparator functions are part of the roadmap (see this [issue](https://github.com/alexandru-dinu/obsidian-sortable/issues/12)).
+- Supported data types: numbers, strings, [ISO dates](https://regex101.com/r/RfMAcx/1). Custom comparator functions are part of the roadmap (see this [issue](https://github.com/alexandru-dinu/obsidian-sortable/issues/12)).
 - No altering of the markdown source code. Sorting is done by rearranging table rows (i.e. `tr` elements).
 - No dependencies.
 
