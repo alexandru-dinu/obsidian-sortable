@@ -127,12 +127,12 @@ function compareRows(
     order: SortOrder,
     collator: Intl.Collator
 ) {
-    let [valueA, typeA] = valueFromCell(a.cells[index]);
-    let [valueB, typeB] = valueFromCell(b.cells[index]);
-
     if (order === SortOrder.DESCENDING) {
-        [valueA, valueB] = [valueB, valueA];
+        [a, b] = [b, a];
     }
+
+    const [valueA, typeA] = valueFromCell(a.cells[index]);
+    const [valueB, typeB] = valueFromCell(b.cells[index]);
 
     if (typeA !== typeB) {
         return collator.compare(valueA.toString(), valueB.toString());
@@ -144,10 +144,13 @@ function compareRows(
             return valueA === valueB ? 0 : valueA < valueB ? -1 : 1;
         case CellTypes.TEXT:
             return collator.compare(valueA.toString(), valueB.toString());
+        default:
+            // unreachable
+            return 0;
     }
 }
 
-function valueFromCell(element: HTMLTableCellElement): [any, CellTypes] {
+function valueFromCell(element: HTMLTableCellElement): [string | number | Date, CellTypes] {
     // TODO: extend to other data-types.
     const text = element.textContent;
 
