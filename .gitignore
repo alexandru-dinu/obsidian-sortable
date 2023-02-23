@@ -1,7 +1,3 @@
-# Intellij
-*.iml
-.idea
-
 # npm
 node_modules
 package-lock.json
@@ -9,7 +5,3 @@ package-lock.json
 # build
 main.js
 *.js.map
-Makefile
-
-# releases
-*.zip
