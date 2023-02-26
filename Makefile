@@ -3,7 +3,7 @@ PLUG=${HOME}/workspace/git/org.git/.obsidian/plugins/obsidian-sortable
 .PHONY: format dev build
 
 format:
-	prettier --tab-width=4 --print-width=100 --write "**/*.ts"
+	npx prettier --tab-width=4 --print-width=100 --write "**/*.ts"
 
 install-symlinks: main.js manifest.json styles.css
 	rm -rf ${PLUG} && mkdir -p ${PLUG}
@@ -34,3 +34,4 @@ remove:
 clean:
 	rm -rf main.js
 	rm -rf node_modules
+	rm -rf package-lock.json
