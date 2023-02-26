@@ -1,11 +1,4 @@
-// allows time to be optional
-const ISO_DATE_REGEX = /^(\d{4}-\d{2}-\d{2})(T\d{2}:\d{2}:\d{2}(\.\d{3})?(Z|[+-]\d{2}:\d{2})?)?$/;
-
-enum CellTypes {
-    TEXT,
-    NUMBER,
-    ISO_DATE,
-}
+import { Numeric, ISODate } from "src/data_types";
 
 enum SortOrder {
     DEFAULT,
@@ -108,60 +101,38 @@ function sortTable(tableState: TableState, tableBody: HTMLTableSectionElement): 
         return;
     }
 
-    const xs = [...tableState.defaultOrdering];
-    const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" });
-    xs.sort((a, b) => compareRows(a, b, tableState.columnIdx, tableState.sortOrder, collator));
+    const tableRows = [...tableState.defaultOrdering];
 
-    fillTable(tableBody, xs);
+    const collator = new Intl.Collator(undefined, { numeric: true, sensitivity: "base" });
+    const parsers = [ISODate, Numeric];
+
+    tableRows.sort((a, b) => {
+        if (tableState.sortOrder === SortOrder.DESCENDING) {
+            [a, b] = [b, a];
+        }
+
+        const valueA = a.cells[tableState.columnIdx].textContent;
+        const valueB = b.cells[tableState.columnIdx].textContent;
+
+        for (const parser of parsers) {
+            // console.log(`trying parser: ${parser.name}`);
+            try {
+                return parser.compare(valueA, valueB);
+            } catch (e) {
+                continue;
+            }
+        }
+
+        // fallback to string comparison
+        return collator.compare(valueA, valueB);
+    });
+
+    fillTable(tableBody, tableRows);
 }
 
 export function resetTable(tableState: TableState, tableBody: HTMLTableSectionElement): void {
     emptyTable(tableBody, tableState.defaultOrdering);
     fillTable(tableBody, tableState.defaultOrdering);
-}
-
-function compareRows(
-    a: HTMLTableRowElement,
-    b: HTMLTableRowElement,
-    index: number,
-    order: SortOrder,
-    collator: Intl.Collator
-) {
-    if (order === SortOrder.DESCENDING) {
-        [a, b] = [b, a];
-    }
-
-    const [valueA, typeA] = valueFromCell(a.cells[index]);
-    const [valueB, typeB] = valueFromCell(b.cells[index]);
-
-    if (typeA !== typeB) {
-        return collator.compare(valueA.toString(), valueB.toString());
-    }
-
-    switch (typeA) {
-        case CellTypes.NUMBER:
-        case CellTypes.ISO_DATE:
-            return valueA === valueB ? 0 : valueA < valueB ? -1 : 1;
-        case CellTypes.TEXT:
-            return collator.compare(valueA.toString(), valueB.toString());
-        default:
-            // unreachable
-            return 0;
-    }
-}
-
-function valueFromCell(element: HTMLTableCellElement): [string | number | Date, CellTypes] {
-    // TODO: extend to other data-types.
-    const text = element.textContent;
-
-    if (ISO_DATE_REGEX.test(text)) {
-        return [new Date(text), CellTypes.ISO_DATE];
-    }
-    const value = parseFloat(text);
-    if (!isNaN(value)) {
-        return [value, CellTypes.NUMBER];
-    }
-    return [text, CellTypes.TEXT];
 }
 
 function emptyTable(tableBody: HTMLTableSectionElement, rows: Array<HTMLTableRowElement>) {
