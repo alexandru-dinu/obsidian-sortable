@@ -3,6 +3,13 @@
 [![Build](https://github.com/alexandru-dinu/obsidian-sortable/actions/workflows/main.yml/badge.svg)](https://github.com/alexandru-dinu/obsidian-sortable/actions/workflows/main.yml)
 [![Discussions](https://img.shields.io/badge/discussions-welcome-blueviolet)](https://github.com/alexandru-dinu/obsidian-sortable/discussions)
 
+> [!IMPORTANT]
+> As of March 12, 2024 I will be archiving this repository since I no longer have the time, nor the interest to further contribute and expand the project's feature set. I appreciate that many of you have found this useful!
+>
+> If anyone wants to continue the development and/or maintain this project, feel free to fork.
+>
+> As an alternative, look at [kraibse/obsidian-table-sorting](https://github.com/kraibse/obsidian-table-sorting).
+
 Sortable is a plugin for [Obsidian](https://obsidian.md) that aims to offer [Wikipedia-like](https://en.wikipedia.org/wiki/Help:Sorting#Example) sortable tables. Sorting is done with respect to a table header, on click:
 - first click: ascending order
 - second click: descending order
